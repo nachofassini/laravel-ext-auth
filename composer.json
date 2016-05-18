@@ -1,0 +1,20 @@
+{
+    "name": "nachofassini/ext-auth",
+    "description": "Extend laravel defaul authentication",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nacho Fassini",
+            "email": "nachofassini@gmail.com"
+        }
+    ],
+    "require": {
+      "zizaco/entrust": "5.2.x-dev",
+      "illuminate/support": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NachoFassini\\": "src"
+        }
+    }
+}
