@@ -1,5 +1,5 @@
 {
-    "name": "nachofassini/ext-auth",
+    "name": "nachofassini/laravel-ext-auth",
     "description": "Extend laravel defaul authentication",
     "license": "MIT",
     "authors": [
