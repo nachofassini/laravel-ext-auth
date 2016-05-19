@@ -13,16 +13,16 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         if (! $this->app->routesAreCached()) {
-            require __DIR__.'/../../routes.php';
+            require __DIR__.'/../routes.php';
         }
         $this->publishes([
-            __DIR__.'/../../views/auth' => base_path('resources/views/auth'),
+            __DIR__.'/../views/auth' => base_path('resources/views/auth'),
         ]);
         $this->publishes([
-            __DIR__.'/../../views/users' => base_path('resources/views/users'),
+            __DIR__.'/../views/users' => base_path('resources/views/users'),
         ]);
         $this->publishes([
-            __DIR__.'/../../views/emails' => base_path('resources/views/emails'),
+            __DIR__.'/../views/emails' => base_path('resources/views/emails'),
         ]);
     }
 
