@@ -43,7 +43,6 @@ class AddAuthFields extends Migration {
         });
 
         Schema::drop('users_estados');
-        Schema::drop('dependencias');
     }
 
 }
