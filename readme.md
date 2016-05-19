@@ -15,7 +15,7 @@ composer.json
 
 ```json
 require: {
-    "NachoFassini/auth": "dev-master",
+    "NachoFassini/laravel-ext-auth": "dev-master",
     "zizaco/entrust": "@dev"
 }
 ```
