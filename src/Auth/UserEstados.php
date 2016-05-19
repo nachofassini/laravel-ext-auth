@@ -1,5 +1,4 @@
 <?php
-
 namespace NachoFassini\Auth;
 
 use Illuminate\Database\Eloquent\Model;

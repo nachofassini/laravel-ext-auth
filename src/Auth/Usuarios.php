@@ -28,6 +28,6 @@ class Usuarios extends User
 
     public function estado()
     {
-        return $this->belongsTo(NachoFassini\Auth\UserEstados::class, 'estado_id');
+        return $this->belongsTo(UserEstados::class, 'estado_id');
     }
 }
