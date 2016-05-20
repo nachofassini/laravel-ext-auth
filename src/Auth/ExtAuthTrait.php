@@ -1,7 +1,7 @@
 <?php
 namespace NachoFassini\Auth;
 
-trait ExtAuth
+trait ExtAuthTrait
 {
     /**
      * The attributes that are mass assignable.
