@@ -1,19 +1,8 @@
 <?php
 namespace NachoFassini\Auth;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\User;
-
-class Usuarios extends User
+trait ExtAuth
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -21,11 +10,20 @@ class Usuarios extends User
      */
     protected $fillable = ['name', 'dni', 'email', 'password', 'remember_token'];
 
+    /**
+     * Verificar si el usuario esta habilitado
+     * @return bool
+     */
     public function habilitado()
     {
         return $this->estado->codigo == 'HAB';
     }
 
+    /**
+     * Obtiene los estados de los usuarios
+     *
+     * @return mixed
+     */
     public function estado()
     {
         return $this->belongsTo(UserEstados::class, 'estado_id');

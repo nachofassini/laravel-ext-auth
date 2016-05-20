@@ -7,7 +7,6 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\User;
 use App\Role;
-use NachoFassini\Auth\Usuarios;
 
 /**
  *
@@ -49,7 +48,7 @@ class ExtAuthController extends AuthController
      */
     protected function authenticated($request, Authenticatable $user)
     {
-        $user = Usuarios::find($user->getAuthIdentifier());
+        $user = User::find($user->getAuthIdentifier());
 
         if ($user->habilitado()) {
             return redirect()->intended($this->redirectPath());

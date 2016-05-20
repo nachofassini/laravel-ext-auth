@@ -4,10 +4,10 @@ namespace NachoFassini\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Mail;
-use NachoFassini\Auth\Usuarios;
 use NachoFassini\Auth\UserEstados;
+use App\User;
 use App\Role;
+use Mail;
 
 /**
  *
@@ -17,7 +17,7 @@ class AdminUsuariosController extends Controller
     protected $user;
     protected $roles;
 
-    public function __construct(Usuarios $user, Role $roles)
+    public function __construct(User $user, Role $roles)
     {
         $this->middleware('auth');
 
@@ -68,7 +68,7 @@ class AdminUsuariosController extends Controller
 
         $random_password = rand(100000, 999999);
 
-        $user = new Usuarios;
+        $user = new User;
         $user->name = $request->name;
         $user->dni = $request->dni;
         $user->email = $request->email;
