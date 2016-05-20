@@ -56,7 +56,7 @@ class ExtAuthController extends AuthController
         }
 
         Auth::logout();
-        return redirect('auth/login')
+        return redirect()->route('auth.login')
             ->withInput()
             ->withErrors([
                 $this->loginUsername() => $this->getInhabilitadoLoginMessage(),

@@ -1,9 +1,17 @@
 <?php
 Route::group(['middleware' => 'web', 'namespace' => 'NachoFassini'], function () {
     //Login de usuario
-    Route::get('auth/login', ['as' => 'auth.login', 'uses' => 'Auth\ExtAuthController@getLogin']);
-    Route::post('auth/login', ['as' => 'auth.dologin', 'uses' => 'Auth\ExtAuthController@postLogin']);
-    Route::get('auth/logout', ['as' => 'auth.logout', 'uses' => 'Auth\ExtAuthController@getLogout']);
+    Route::get('login', ['as' => 'auth.login', 'uses' => 'Auth\ExtAuthController@getLogin']);
+    Route::post('login', ['as' => 'auth.dologin', 'uses' => 'Auth\ExtAuthController@postLogin']);
+    Route::get('logout', ['as' => 'auth.logout', 'uses' => 'Auth\ExtAuthController@getLogout']);
+    //Agregar configuracion para permitir elegir si el sistema permitira alta de usuarios y recuperacion de pass
+    if (false) {
+        Route::post('password/email', function () { abort(403, 'Accion no permitida'); });
+        Route::post('password/reset', function () { abort(403, 'Accion no permitida'); });
+        Route::get('password/token/{token?}', function () { abort(403, 'Accion no permitida'); });
+        Route::get('register', function () { abort(403, 'Accion no permitida'); });
+        Route::post('register', function () { abort(403, 'Accion no permitida'); });
+    }
     Route::get('auth/profile', ['as' => 'auth.profile', 'uses' => 'Auth\ExtAuthController@show' ]);
     Route::post('auth/update', ['as' => 'auth.update', 'uses' => 'Auth\ExtAuthController@update' ]);
     Route::get('auth/edit', ['as' => 'auth.edit', 'uses' => 'Auth\ExtAuthController@edit' ]);

@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md-6 login-form-content">
                                 <div class="">
-                                    <form class="" role="form" method="POST" action="{{ url('/auth/login') }}">
+                                    <form class="" role="form" method="POST" action="{{ route('auth.dologin') }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                                         <div class="form-group">
