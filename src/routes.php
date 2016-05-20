@@ -8,7 +8,7 @@ Route::group(['middleware' => 'web', 'namespace' => 'NachoFassini'], function ()
     if (true) {
         Route::post('password/email', function () { abort(403, 'Accion no permitida'); });
         Route::post('password/reset', function () { abort(403, 'Accion no permitida'); });
-        Route::get('password/token/{token?}', function () { abort(403, 'Accion no permitida'); });
+        Route::get('password/reset/{token?}', function () { abort(403, 'Accion no permitida'); });
         Route::get('register', function () { abort(403, 'Accion no permitida'); });
         Route::post('register', function () { abort(403, 'Accion no permitida'); });
     }
