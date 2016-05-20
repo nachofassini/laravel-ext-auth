@@ -4,13 +4,6 @@ namespace NachoFassini\Auth;
 trait ExtAuthTrait
 {
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['name', 'dni', 'email', 'password', 'remember_token'];
-
-    /**
      * Verificar si el usuario esta habilitado
      * @return bool
      */

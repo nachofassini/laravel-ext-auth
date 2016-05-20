@@ -1,4 +1,5 @@
 @extends('auth.main')
+
 @section('content')
     <div class="container">
         <div class="row">
@@ -17,12 +18,7 @@
                     <div class="panel-heading"><h3>Iniciar Sesión</h3></div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="login-form-side">
-
-                                </div>
-                            </div>
-                            <div class="col-md-6 login-form-content">
+                            <div class="col-md-12 login-form-content">
                                 <div class="">
                                     <form class="" role="form" method="POST" action="{{ route('auth.dologin') }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
