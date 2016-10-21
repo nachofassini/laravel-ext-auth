@@ -23,8 +23,7 @@ class AddAuthFields extends Migration {
 
         Schema::table('users', function(Blueprint $table)
         {
-            $table->integer('dni')->unsigned()->nullable();;
-            $table->integer('estado_id')->unsigned()->nullable();;
+            $table->integer('estado_id')->unsigned()->nullable();
             $table->foreign('estado_id')->references('id')->on('users_estados');
         });
     }
@@ -39,7 +38,7 @@ class AddAuthFields extends Migration {
         Schema::table('users', function(Blueprint $table)
         {
             $table->dropForeign('users_estado_id_foreign');
-            $table->dropColumn('dni', 'estado_id');
+            $table->dropColumn('estado_id');
         });
 
         Schema::drop('users_estados');

@@ -12,30 +12,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (! $this->app->routesAreCached()) {
-            require __DIR__.'/../routes.php';
+        if (!$this->app->routesAreCached()) {
+            require __DIR__ . '/../routes.php';
         }
         $this->publishes([
-            __DIR__.'/../views/auth' => base_path('resources/views/auth'),
+            __DIR__.'/../laravel-ext-auth.php' => config_path('laravel-ext-auth.php'),
         ]);
-        $this->publishes([
-            __DIR__.'/../views/users' => base_path('resources/views/users'),
-        ]);
-        $this->publishes([
-            __DIR__.'/../views/emails' => base_path('resources/views/emails'),
-        ]);
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->singleton('command.auth.table', function ($app) {
-            return new AuthTableCommand;
-        });
-        $this->commands('command.auth.table');
+        $this->mergeConfigFrom(
+            __DIR__.'/../laravel-ext-auth.php', 'laravel-ext-auth'
+        );
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+        $this->loadViewsFrom(__DIR__ . '/../views', 'laravel-ext-auth');
     }
 }

@@ -16,7 +16,6 @@
                 <tr>
                     <th></th>
                     <th>Usuario</th>
-                    <th>DNI</th>
                     <th>Email</th>
                     <th>Rol</th>
                     <th>Estado</th>
@@ -37,7 +36,6 @@
                             </a>
                         </td>
                         <td>{{$item->name}}</td>
-                        <td>{{$item->dni}}</td>
                         <td>{{$item->email}}</td>
                         <td>{{$item->roles->first()->display_name or ''}}</td>
                         <td>{{$item->estado->codigo or ''}}</td>

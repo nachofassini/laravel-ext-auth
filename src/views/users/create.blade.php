@@ -9,10 +9,6 @@
         {!! Form::text('name', old('name'), ['class' => 'form-control', 'placeholder' => 'Ingrese el nombre del usuario', 'required' => 'required']) !!}
       </div>
       <div class="form-group">
-        {!! Form::label('dni', 'DNI:') !!}
-        {!! Form::text('dni', old('dni'), ['class' => 'form-control', 'placeholder' => 'Ingrese el dni del usuario', 'required' => 'required']) !!}
-      </div>
-      <div class="form-group">
         {!! Form::label('email', 'Email:') !!}
         {!! Form::text('email', old('email'), ['class' => 'form-control', 'placeholder' => 'Email', 'required' => 'required']) !!}
       </div>

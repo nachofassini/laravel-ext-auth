@@ -2,13 +2,12 @@
 
 namespace NachoFassini\Auth;
 
-use App\Http\Controllers\Auth\LoginController as LaravelLoginController;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
-use App\Role;
 
-class LoginController extends LaravelLoginController
+final class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -20,6 +19,8 @@ class LoginController extends LaravelLoginController
     | to conveniently provide its functionality to your applications.
     |
     */
+    public $loginView = 'laravel-ext-auth::auth.login';
+    public $redirectTo = 'admin';
 
     use AuthenticatesUsers;
 
@@ -38,6 +39,16 @@ class LoginController extends LaravelLoginController
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);
+    }
+
+    /**
+     * Show the application login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        return view($this->loginView);
     }
 
     /**

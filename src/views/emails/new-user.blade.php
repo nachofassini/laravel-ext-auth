@@ -1,4 +1,4 @@
-@extends('emails.layout-auth')
+@extends('laravel-ext-auth::emails.layout-auth')
 
 @section('asunto')
     <p>{!! trans('messages.email-asunto.new-user') !!}</p>

@@ -1,28 +1,27 @@
 <?php
 namespace NachoFassini\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use NachoFassini\Auth\UserEstados;
-use App\User;
 use App\Role;
-use Mail;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use NachoFassini\Auth\Mail\NewUser;
+use NachoFassini\Auth\Mail\PasswordReset;
+use NachoFassini\Auth\UserEstados;
 
 /**
  *
  */
-class AdminUsuariosController extends Controller
+class UsersController extends Controller
 {
     protected $user;
     protected $roles;
 
-    public function __construct(User $user, Role $roles)
+    public function __construct(User $user, Role $role)
     {
-        $this->middleware('auth');
-
         $this->user = $user;
-        $this->roles = $roles;
+        $this->roles = $role;
     }
 
     /**
@@ -30,11 +29,10 @@ class AdminUsuariosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = $this->user->paginate();
-
-        return view('users.index', compact('usuarios'));
+        $usuarios = $this->user->busqueda()->paginate();
+        return view('laravel-ext-auth::users.index', compact('usuarios'));
     }
 
     /**
@@ -44,34 +42,32 @@ class AdminUsuariosController extends Controller
      */
     public function create()
     {
-        $roles = $this->roles->lists('display_name', 'id');
-        return view('users.create', compact('roles'));
+        $roles = $this->roles->pluck('display_name', 'id');
+        return view('laravel-ext-auth::users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'name' => 'required|string|max:255',
-                'dni' => 'required|numeric|unique:users|digits_between:7,10',
-                'email' => 'required|email|max:255|unique:users',
-                'rol' => 'required|numeric',
-            ]
-        );
+        $this->validate($request, [
+            'name' => 'required|string|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'rol' => 'required|numeric',
+        ], [
+            'persona_id.unique' => 'La persona ya esta registrada como usuario.',
+            'email.unique' => 'El email ya fue registrado por otro usuario.',
+        ]);
 
         $random_password = rand(100000, 999999);
 
         $user = new User;
-        $user->name = $request->name;
-        $user->dni = $request->dni;
         $user->email = $request->email;
+        $user->name = $request->name;
         $user->password = bcrypt($random_password);
         $user->remember_token = str_random(10);
         $user->estado_id = UserEstados::where('codigo', 'HAB')->get()->first()->id;
@@ -79,20 +75,17 @@ class AdminUsuariosController extends Controller
 
         $user->attachRole($request->input('rol'));
 
-        Mail::queue('emails.new-user', ['user' => $user, 'password' => $random_password], function ($message) use ($user) {
-            $message->from('noreply@hotel.com.ar', 'Noresponder');
-            $message->to($user->email, $user->name);
-            $message->subject('Alta de usuario');
-        });
+        Mail::to($user->email, $user->nombre)
+            ->send(new NewUser($user, $random_password));
 
         return redirect()->route('auth.users.index')
-            ->withSuccess('Usuario registrado con exito. Recibira un correo electronico con sus credenciales de acceso.');
+            ->with('success', 'Usuario registrado con exito. Recibira un correo electronico con sus credenciales de acceso.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -103,23 +96,23 @@ class AdminUsuariosController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $user = $this->user->find($id);
-        $roles = $this->roles->lists('display_name', 'id');
-        $estados = UserEstados::lists('nombre', 'id');
+        $roles = $this->roles->pluck('display_name', 'id');
+        $estados = UserEstados::pluck('nombre', 'id');
 
-        return view('users.edit', compact('user', 'roles', 'estados'));
+        return view('laravel-ext-auth::users.edit', compact('user', 'roles', 'estados'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -127,8 +120,7 @@ class AdminUsuariosController extends Controller
         $this->validate(
             $request,
             [
-                'name'  => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:users,email,'.$id.',id',
+                'email' => 'required|email|max:255|unique:users,email,' . $id . ',id',
                 'rol' => 'required|numeric',
                 'estado' => 'required|numeric',
             ],
@@ -138,7 +130,6 @@ class AdminUsuariosController extends Controller
         );
 
         $user = $this->user->find($id);
-        $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->estado_id = $request->input('estado');
         $user->save();
@@ -150,25 +141,10 @@ class AdminUsuariosController extends Controller
             ->with('success', 'Datos de perfil actualizados');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $dep = $this->dependencia->findOrFail($id);
-        $dep->eliminar($id);
-
-        return redirect()->route('auth.dependencia.index')
-            ->withSuccess('Acceso eliminado correctamente!');
-    }
-
     public function editCredenciales($id)
     {
         $user = $this->user->find($id);
-        return view('users.credenciales', ['user' => $user]);
+        return view('laravel-ext-auth::users.credenciales', ['user' => $user]);
     }
 
     public function updateCredenciales(Request $request, $id)
@@ -197,26 +173,13 @@ class AdminUsuariosController extends Controller
         $user->save();
 
         if ($request->input('email') || $request->input('automaticamente')) {
-            Mail::queue('emails.reset-password', ['user' => $user, 'password' => $password], function ($message) use ($user) {
-                $message->from('noreply@hotel.com.ar', 'Noresponder');
-                $message->to($user->email, $user->name);
-                $message->subject('Cambio de credenciales');
-            });
+            Mail::to($user->email, $user->nombre)
+                ->send(new PasswordReset($user, $password));
 
             return redirect()->route('auth.users.index')
-                ->withSuccess('Contraseña actualizada exitosamente. Se ha enviado un mensaje al E-mail '.$user->email.' con sus datos de acceso.');
+                ->with('success', 'Contraseña actualizada exitosamente. Se ha enviado un mensaje al E-mail ' . $user->email . ' con sus datos de acceso.');
         }
 
         return redirect()->route('auth.users.index')->with('success', 'Contraseña actualizada exitosamente');
-    }
-
-    public function usersPorCriterio(Request $request)
-    {
-        $criterio = $request->get('nombre');
-        $usuarios = $this->user->where('dni', 'like', '%'.$criterio.'%')
-            ->orWhere('name', 'like', '%'.$criterio.'%')
-            ->take(12)
-            ->get();
-        return response()->json($usuarios);
     }
 }
