@@ -10,13 +10,13 @@ de este modo las reglas de acceso pueden ser incorporadas tan tarde como se
 desee.
 
 ## Instalacion
-Como no se esta versionando aun el paquete se debe incluir lo siguiente en
-composer.json
+
+Para laravel 5.3:
 
 ```json
 require: {
-    "NachoFassini/laravel-ext-auth": "dev-master",
-    "zizaco/entrust": "@dev"
+    "NachoFassini/laravel-ext-auth": "~2.0.0",
+    "zizaco/entrust": "*"
 }
 ```
 
@@ -79,9 +79,7 @@ Una vez agregados los providers agregar las migraciones
 
 ```bash
 php artisan entrust:migration #Crea migracion para entrust
-php artisan auth:table        #Crea migracion para auth
 php artisan migrate           #Migrar
-php artisan vendor:publish    #Mueve las vistas del paquete a su destino
 ```
 
 Agregar a ```database/seeds/DatabaseSeeder.php``` la siguiente linea
@@ -91,53 +89,9 @@ Agregar a ```database/seeds/DatabaseSeeder.php``` la siguiente linea
     $this->call(NachoFassini\Auth\Seeders\UserEstadosTableSeeder::class);
 ```
 
-Si se quiere que se actualicen las vistas automaticamente es necesario agregar
-la ejecucion de ```vendor:publish``` en composer.json:
-
-```json
-{
-  "scripts": {
-     "post-install-cmd": [
-       ...
-       "php artisan vendor:publish"
-     ],
-     "post-update-cmd": [
-       ...
-       "php artisan vendor:publish"
-     ],
-  }
-}
-```
-
-En git se deberian ignorar las siguientes rutas
-
-```bash
-resources/views/users/
-resources/views/emails/layout-auth.blade.php
-resources/views/emails/new-user.blade.php
-resources/views/emails/reset-password.blade.php
-```
-
 ### Mails
 
-Para que funcione el envio de mails al crear usuarios o editar sus credenciales
-es necesario habilitar algun metodo para encolar jobs.
-
-Primero ejecutar migracion
-
-```bash
-    php artisan queue:table
-    php artisan migrate
-```
-
-Para escuchar cambios en la cola y enviar las tareas encoladas.
-Se pueden usar tres metodos:
-    - Queue listen de laravel ("php artisan queue:listen")
-    - Kernell y cron ('https://laravel.com/docs/5.2/scheduling#defining-schedules')
-    - Suepervisor ('https://laravel.com/docs/5.2/queues#supervisor-configuration')
-
-
-Luego en el archivo `lang/es/messages.php` hay que asegurarse de que esten
+En el archivo `lang/es/messages.php` hay que asegurarse de que esten
 definidas las siguientes variables indispensables para el envio de mails
     - nombre => nombre del sistema
     - url => url de origen del mensaje
@@ -196,16 +150,17 @@ In general, it may be helpful to think of the last two attributes in the form of
 
 #### User
 
-Next, use the `EntrustUserTrait` trait in your existing `User` model. For example:
+Next, use the `EntrustUserTrait` and `ExtAuthTrait` trait in your existing `User` model. For example:
 
 ```php
 <?php
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use NachoFassini\Auth\ExtAuthTrait;
 
 class User extends Eloquent
 {
-    use EntrustUserTrait; // add this trait to your user model
+    use EntrustUserTrait, ExtAuthTrait; // add this trait to your user model
 
     ...
 }
@@ -240,7 +195,7 @@ Los ```items``` route definen una ruta que puede ser una string en la que se
 puede usar "*" como comodin. Los ```permission``` son los nombres de los
 permisos
 
-### Acceso a administracion de usuarios y dependencias
+### Acceso a administracion de usuarios
 
 Agregar los links a la administracion de usuarios y sus dependencias
 
