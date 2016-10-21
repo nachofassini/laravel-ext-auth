@@ -1,7 +1,7 @@
 <?php
 namespace NachoFassini\Auth;
 
-trait ExtAuthTrait
+trait HasEstadoTrait
 {
     /**
      * Verificar si el usuario esta habilitado
