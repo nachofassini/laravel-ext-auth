@@ -1,10 +1,12 @@
 {
   "name": "nachofassini/laravel-ext-auth",
-  "description": "Extend laravel defaul authentication",
+  "description": "Extend laravel default authentication",
+  "keywords": ["laravel","authentication"],
   "license": "MIT",
+  "version": "2.0.0",
   "authors": [
     {
-      "name": "Nacho Fassini",
+      "name": "Ignacio Fassini",
       "email": "nachofassini@gmail.com"
     }
   ],
