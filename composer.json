@@ -1,22 +1,27 @@
 {
-  "name": "nachofassini/laravel-ext-auth",
-  "description": "Extend laravel default authentication",
-  "keywords": ["laravel","authentication"],
-  "license": "MIT",
-  "version": "2.0.0",
-  "authors": [
-    {
-      "name": "Ignacio Fassini",
-      "email": "nachofassini@gmail.com"
-    }
-  ],
-  "require": {
-    "illuminate/support": "~5.3",
-    "zizaco/entrust": "^1.7"
-  },
-  "autoload": {
-    "psr-4": {
-      "NachoFassini\\": "src"
-    }
-  }
+    "name": "nachofassini/laravel-ext-auth",
+    "description": "Extend laravel default authentication",
+    "keywords": [
+        "laravel",
+        "authentication"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+          "name": "Ignacio Fassini",
+          "email": "nachofassini@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "~5.3",
+        "zizaco/entrust": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "NachoFassini\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
