@@ -5,6 +5,7 @@
         "laravel",
         "authentication"
     ],
+    "homepage": "https://gitlab.com/nachofassini/laravel-ext-auth",
     "type": "library",
     "license": "MIT",
     "authors": [
