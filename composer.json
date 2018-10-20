@@ -16,7 +16,7 @@
     ],
     "require": {
         "illuminate/support": "~5.3",
-        "zizaco/entrust": "^1.7"
+        "zizaco/entrust": "5.2.x-dev"
     },
     "autoload": {
         "psr-4": {
